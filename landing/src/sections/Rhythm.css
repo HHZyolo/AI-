@@ -1,0 +1,85 @@
+/* 一天节律 —— 2×2 网格布局 */
+
+.rhythm {
+  position: relative;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+/* 天色氛围光层 */
+.rhythm__sky {
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(70% 50% at 20% 0%, rgba(var(--accent-rgb), 0.10), transparent 60%),
+    radial-gradient(60% 50% at 90% 100%, rgba(var(--violet-rgb), 0.12), transparent 60%);
+  pointer-events: none;
+}
+
+.rhythm__head {
+  position: relative; z-index: 1;
+  margin-bottom: var(--space-5);
+}
+.rhythm__head .section-h2 { margin-top: 18px; }
+
+/* 2×2 网格 */
+.rhythm__grid {
+  position: relative; z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+}
+
+.rhythm__scene {
+  position: relative;
+  display: flex; flex-direction: column;
+  padding: 36px;
+}
+
+.rhythm__index {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 24px;
+}
+.rhythm__time {
+  font: 500 15px/1 var(--font-mono);
+  letter-spacing: 0.06em;
+  color: var(--accent);
+}
+.rhythm__sky-tag { padding: 4px 10px; font-size: 12px; }
+
+.rhythm__icon {
+  width: 52px; height: 52px;
+  display: grid; place-items: center;
+  border-radius: 14px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  margin-bottom: 20px;
+}
+.rhythm__label {
+  font: 700 13px/1 var(--font-sans);
+  letter-spacing: 0.14em;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+}
+.rhythm__title {
+  font: 700 23px/1.45 var(--font-sans);
+  color: var(--text);
+  margin: 14px 0 12px;
+}
+.rhythm__desc {
+  font: 400 16px/1.75 var(--font-sans);
+  color: var(--text-secondary);
+}
+.rhythm__no {
+  position: absolute;
+  right: 24px; bottom: 10px;
+  font: 900 96px/1 var(--font-display);
+  color: var(--text);
+  opacity: 0.04;
+}
+
+/* ---- 响应式: 移动端单列堆叠 ---- */
+@media (max-width: 760px) {
+  .rhythm__grid { grid-template-columns: 1fr; gap: var(--space-2); }
+  .rhythm__scene { padding: 26px; }
+  .rhythm__no { font-size: 64px; }
+}

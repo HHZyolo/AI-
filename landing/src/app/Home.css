@@ -1,0 +1,140 @@
+/* 产品主页 + 角色光球共用样式 —— 桌面 Web 布局 */
+
+/* ---------- 角色声纹光球 ---------- */
+.char-orb {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  --orb-accent: var(--accent);
+  flex-shrink: 0;
+}
+.char-orb__core {
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%,
+              color-mix(in srgb, var(--orb-accent) 72%, white),
+              var(--orb-accent) 55%,
+              color-mix(in srgb, var(--orb-accent) 40%, black) 100%);
+  box-shadow: 0 0 50px color-mix(in srgb, var(--orb-accent) 42%, transparent);
+}
+.char-orb__initial {
+  position: relative;
+  font-family: var(--font-display);
+  font-weight: 900;
+  color: var(--text-on-accent);
+}
+.char-orb.is-live::after {
+  content: ''; position: absolute; inset: -12px;
+  border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--orb-accent) 45%, transparent);
+  animation: orb-breathe 1.8s ease-in-out infinite;
+}
+@keyframes orb-breathe {
+  0%, 100% { transform: scale(1); opacity: .7; }
+  50%      { transform: scale(1.16); opacity: 0; }
+}
+
+/* ---------- 主页双栏 ---------- */
+.home__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(32px, 6vw, 80px);
+  align-items: center;
+  min-height: 60vh;
+}
+
+/* 左:角色展示 */
+.home__showcase {
+  position: relative;
+  display: flex; flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 40px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+}
+.home__halo {
+  position: absolute;
+  top: 0; left: 50%; transform: translateX(-50%);
+  width: 380px; height: 380px;
+  background: radial-gradient(circle, rgba(var(--accent-rgb), 0.14), transparent 65%);
+  pointer-events: none;
+}
+.home__char-name {
+  font: 900 32px/1.2 var(--font-display);
+  color: var(--text);
+  margin-top: 28px;
+}
+.home__char-persona {
+  font: 500 14px/1.5 var(--font-sans);
+  color: var(--text-tertiary);
+  margin-top: 8px;
+}
+.home__char-quote {
+  font: 400 16px/1.7 var(--font-sans);
+  color: var(--text-secondary);
+  margin-top: 18px;
+  max-width: 30ch;
+}
+.home__switch {
+  display: inline-flex; align-items: center; gap: 7px;
+  margin-top: 22px;
+  padding: 10px 20px;
+  font: 500 14px/1 var(--font-sans);
+  color: var(--text-secondary);
+  background: var(--surface-alt);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  text-decoration: none;
+  transition: border-color .2s ease, color .2s ease;
+}
+.home__switch:hover { border-color: var(--border-hover); color: var(--accent); }
+.home__switch svg { color: var(--accent); }
+
+/* 右:开始陪玩面板 */
+.home__panel {
+  display: flex; flex-direction: column;
+  align-items: flex-start;
+}
+.home__online {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 7px 14px;
+}
+.home__panel-title {
+  font: 900 clamp(30px, 3.4vw, 42px)/1.25 var(--font-display);
+  color: var(--text);
+  margin: 22px 0 16px;
+}
+.home__panel-lead {
+  font: 400 16px/1.7 var(--font-sans);
+  color: var(--text-secondary);
+  max-width: 38ch;
+  margin-bottom: 28px;
+}
+.home__panel .trial { width: 100%; }
+.home__start {
+  width: 100%;
+  justify-content: center;
+  margin-top: 20px;
+  padding-block: 18px;
+  font-size: 17px;
+}
+.home__hint {
+  display: flex; align-items: center;
+  gap: 7px;
+  margin-top: 14px;
+  font: 400 13px/1.6 var(--font-sans);
+  color: var(--text-tertiary);
+}
+.home__hint svg { color: var(--accent); }
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 880px) {
+  .home__grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .home__showcase { padding: 32px 24px; }
+  .home__panel { align-items: stretch; text-align: left; }
+}

@@ -1,0 +1,68 @@
+/* 懂游戏 —— 术语墙,青色 HUD 细节 */
+
+.game { background: var(--bg); }
+
+.game__head { margin-bottom: var(--space-5); max-width: 760px; }
+.game__head .section-h2 { margin: 18px 0 20px; }
+
+.game__card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 36px;
+  transition: border-color .3s ease;
+}
+.game__card:hover { border-color: rgba(61, 214, 196, 0.30); }
+
+.game__groups {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+}
+.game__group {
+  padding: 22px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+.game__group-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-bottom: 16px;
+  font: 700 13px/1 var(--font-sans);
+  letter-spacing: 0.12em;
+  color: var(--text);
+}
+.game__group-label svg { color: var(--hud); }
+
+.game__card-head {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.game__ic {
+  width: 46px; height: 46px;
+  display: grid; place-items: center;
+  border-radius: 12px;
+  background: rgba(61, 214, 196, 0.10);
+  color: var(--hud);
+  flex-shrink: 0;
+}
+.game__name {
+  font: 800 21px/1.2 var(--font-display);
+  color: var(--text);
+}
+.game__sub {
+  font: 500 13px/1 var(--font-mono);
+  color: var(--text-tertiary);
+}
+
+.game__terms {
+  display: flex; flex-wrap: wrap; gap: 9px;
+  list-style: none;
+}
+
+@media (max-width: 760px) {
+  .game__groups { grid-template-columns: 1fr; }
+  .game__card { padding: 24px; }
+}

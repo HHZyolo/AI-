@@ -1,0 +1,120 @@
+/* 终 CTA + 页脚 —— DESIGN.md §7 巧思彩蛋 */
+
+/* ---------- CTA ---------- */
+.cta {
+  position: relative;
+  padding-block: calc(var(--space-7) / 2);
+  background: var(--bg);
+  overflow: hidden;
+  text-align: center;
+}
+.cta__glow {
+  position: absolute;
+  top: -30%; left: 50%;
+  transform: translateX(-50%);
+  width: 120%; height: 150%;
+  background: var(--grad-glow);
+  pointer-events: none;
+}
+
+.cta__inner {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; align-items: center;
+}
+.cta__title {
+  font: 900 clamp(36px, 5.5vw, 64px)/1.2 var(--font-display);
+  color: var(--text);
+  margin: 20px 0 18px;
+}
+.cta__lead {
+  font: 400 clamp(16px, 1.7vw, 19px)/1.7 var(--font-sans);
+  color: var(--text-secondary);
+  max-width: 36ch;
+}
+.cta__actions {
+  display: flex; flex-direction: column; align-items: center; gap: 16px;
+  margin-top: 36px;
+}
+.cta__btn { padding: 18px 44px; font-size: 17px; }
+.cta__hint {
+  display: inline-flex; align-items: center; gap: 7px;
+  font: 400 13px/1 var(--font-sans);
+  color: var(--text-tertiary);
+}
+.cta__hint svg { color: var(--accent); }
+
+/* 彩蛋:全站眨眼 —— 角色光球瞬变 */
+.cta.is-wink ~ * .char-card__orb,
+.is-wink .char-card__orb { animation: wink .6s ease; }
+@keyframes wink {
+  0%, 100% { transform: scaleY(1); }
+  45%, 55% { transform: scaleY(0.12); }
+}
+
+/* ---------- Footer ---------- */
+.footer {
+  background: var(--bg-deep);
+  border-top: 1px solid var(--border);
+  padding-top: var(--space-5);
+}
+.footer__inner {
+  display: flex; justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-4);
+  padding-bottom: var(--space-4);
+}
+.footer__logo {
+  display: flex; align-items: center; gap: 9px;
+  background: none; border: none; cursor: pointer; padding: 0;
+  font: 800 18px/1 var(--font-display);
+  color: var(--text);
+}
+.footer__tagline {
+  font: 400 14px/1.6 var(--font-sans);
+  color: var(--text-tertiary);
+  margin-top: 12px;
+  max-width: 34ch;
+}
+.footer__links {
+  display: flex; flex-wrap: wrap; gap: 24px;
+}
+.footer__link {
+  font: 500 14px/1 var(--font-sans);
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color .2s ease;
+}
+.footer__link:hover { color: var(--accent-hover); }
+.footer__link:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 3px;
+}
+
+/* 彩蛋区 */
+.footer__egg {
+  display: flex; align-items: center; gap: 10px;
+  padding-block: 22px;
+  border-top: 1px solid var(--border);
+}
+.footer__egg-text {
+  font: 400 13px/1.6 var(--font-mono);
+  color: var(--text-tertiary);
+  letter-spacing: 0.02em;
+}
+.footer__egg-time { color: var(--accent); }
+
+.footer__bar {
+  display: flex; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px;
+  padding-block: 22px;
+  border-top: 1px solid var(--border);
+  font: 400 12px/1.6 var(--font-sans);
+  color: var(--text-tertiary);
+}
+
+@media (max-width: 760px) {
+  .footer__inner { flex-direction: column; gap: var(--space-3); }
+  .footer__bar { flex-direction: column; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .char-card__orb { animation: none !important; }
+}

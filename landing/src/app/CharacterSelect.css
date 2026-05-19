@@ -1,0 +1,124 @@
+/* 角色选择页 —— 桌面三卡横向网格。DESIGN.md §4 card--character 选中态 */
+
+.cselect__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.cselect__card {
+  --char-accent: var(--accent);
+  display: flex; flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 36px 28px;
+  cursor: pointer;
+  position: relative;
+  transition: border-color .25s ease, background .25s ease,
+              box-shadow .25s ease, transform .2s cubic-bezier(.22,.61,.36,1);
+}
+.cselect__card:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-6px);
+}
+.cselect__card:focus-visible {
+  outline: 2px solid var(--char-accent);
+  outline-offset: 3px;
+}
+
+/* 选中态 */
+.cselect__card.is-selected {
+  border-color: var(--char-accent);
+  background: linear-gradient(170deg,
+              color-mix(in srgb, var(--char-accent) 12%, var(--surface)) 0%,
+              var(--surface) 55%);
+  box-shadow: 0 0 0 1px var(--char-accent),
+              0 18px 44px color-mix(in srgb, var(--char-accent) 22%, transparent);
+}
+
+/* 选中勾 —— 右上角 */
+.cselect__check {
+  position: absolute; top: 18px; right: 18px;
+  width: 28px; height: 28px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-strong);
+  color: var(--text-on-accent);
+  transition: background .2s ease, border-color .2s ease;
+}
+.cselect__card.is-selected .cselect__check {
+  background: var(--char-accent);
+  border-color: var(--char-accent);
+}
+
+.cselect__name-row {
+  display: flex; align-items: baseline; gap: 10px;
+  margin-top: 22px;
+}
+.cselect__name {
+  font: 800 22px/1.2 var(--font-display);
+  color: var(--text);
+}
+.cselect__age {
+  font: 500 13px/1 var(--font-mono);
+  color: var(--text-tertiary);
+}
+.cselect__persona {
+  font: 500 14px/1.5 var(--font-sans);
+  color: var(--text-secondary);
+  margin-top: 8px;
+}
+
+.cselect__quote {
+  font: 400 14px/1.7 var(--font-sans);
+  color: var(--text-secondary);
+  background: var(--surface-alt);
+  border-left: 2px solid var(--char-accent);
+  border-radius: 0 10px 10px 0;
+  padding: 12px 14px;
+  margin: 18px 0;
+  text-align: left;
+}
+
+.cselect__traits {
+  display: flex; flex-wrap: wrap; gap: 7px;
+  justify-content: center;
+}
+.cselect__trait {
+  font: 500 12px/1 var(--font-sans);
+  color: var(--text-secondary);
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 6px 9px;
+}
+
+.cselect__meta {
+  display: flex; align-items: center; gap: 6px;
+  justify-content: center;
+  margin-top: 16px;
+  font: 500 12px/1.4 var(--font-mono);
+  color: var(--text-tertiary);
+}
+.cselect__meta svg { color: var(--char-accent); }
+
+/* 确认条 */
+.cselect__foot {
+  display: flex; justify-content: center;
+  margin-top: 44px;
+}
+.cselect__confirm {
+  min-width: 280px;
+  justify-content: center;
+  padding-block: 17px;
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 880px) {
+  .cselect__grid { grid-template-columns: 1fr; max-width: 440px; margin-inline: auto; }
+  .cselect__confirm { width: 100%; min-width: 0; }
+  .cselect__foot { margin-top: 32px; }
+}

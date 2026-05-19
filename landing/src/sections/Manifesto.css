@@ -1,0 +1,62 @@
+/* 宣言横滚带 —— DESIGN.md §7 爆点 2 */
+
+.manifesto {
+  padding-block: var(--space-6);
+  background: var(--bg-deep);
+  overflow: hidden;
+  position: relative;
+}
+.manifesto::before,
+.manifesto::after {
+  content: ''; position: absolute; top: 0; bottom: 0;
+  width: 14vw; z-index: 2; pointer-events: none;
+}
+.manifesto::before { left: 0;  background: linear-gradient(90deg, var(--bg-deep), transparent); }
+.manifesto::after  { right: 0; background: linear-gradient(270deg, var(--bg-deep), transparent); }
+
+.manifesto__marquee {
+  display: flex;
+  width: max-content;
+  white-space: nowrap;
+}
+.manifesto__marquee--a { animation: marquee 32s linear infinite; }
+.manifesto__marquee--b {
+  margin-top: 4px;
+  animation: marquee 32s linear infinite reverse;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.manifesto__word {
+  display: inline-flex; align-items: center;
+  font: 900 clamp(48px, 9vw, 116px)/1.1 var(--font-display);
+  color: var(--text);
+}
+/* 第二行 —— 品红描边空心字 */
+.manifesto__word--ghost {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(var(--accent-rgb), 0.55);
+  opacity: 0.85;
+}
+.manifesto__sep {
+  color: var(--accent);
+  margin: 0 0.35em;
+  -webkit-text-stroke: 0;
+}
+
+.manifesto__caption {
+  text-align: center;
+  margin: var(--space-5) auto 0;
+  max-width: 30ch;
+  font: 400 clamp(17px, 1.8vw, 21px)/1.7 var(--font-sans);
+  color: var(--text-secondary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .manifesto__marquee { animation: none; transform: translateX(0); }
+  /* 静态时只展示一组,避免文字溢出空白 */
+  .manifesto__marquee { justify-content: center; width: 100%; flex-wrap: wrap; }
+  .manifesto__word { font-size: clamp(32px, 6vw, 56px); }
+}

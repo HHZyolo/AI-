@@ -23,3 +23,9 @@ pnpm-debug.log*
 # Env
 .env
 .env.*.local
+
+# Backend 本地数据 / 试听音频 / SQLite
+backend/data/
+backend/.venv/
+backend/__pycache__/
+backend/**/__pycache__/

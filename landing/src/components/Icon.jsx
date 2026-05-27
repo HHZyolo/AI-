@@ -17,6 +17,8 @@ const PATHS = {
   close: <><path d="M18 6 6 18M6 6l12 12" /></>,
   ear: <><path d="M6 8a6 6 0 0 1 12 0c0 4-3 5-3 8a3 3 0 0 1-6 0M9 9a3 3 0 0 1 6 0" /></>,
   chat: <><path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-6.4A8 8 0 1 1 21 12Z" /></>,
+  mail: <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></>,
+  lock: <><rect x="4" y="11" width="16" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></>,
 };
 
 export default function Icon({ name, size = 22, className = '', style }) {

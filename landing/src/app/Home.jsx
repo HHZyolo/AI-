@@ -66,7 +66,7 @@ export default function Home() {
           <p className="home__panel-lead">
             {loggedIn
               ? `${character.name}已经准备好陪你了 —— 点下面开始这次陪玩。`
-              : '手机号登录即可领取 10 分钟免费试用,无需下载,浏览器直接开聊。'}
+              : '邮箱注册即可领取 10 分钟免费试用,无需下载,浏览器直接开聊。'}
           </p>
 
           {/* 试用额度 */}
@@ -111,7 +111,7 @@ export default function Home() {
           {!loggedIn && !empty && (
             <p className="home__hint">
               <Icon name="bolt" size={13} />
-              点击「开始陪玩」即可手机号登录
+              点击「开始陪玩」即可登录/注册
             </p>
           )}
         </section>

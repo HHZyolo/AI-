@@ -203,3 +203,76 @@
   .call__wave.is-active .call__bar { animation: none; height: 20px; }
   .call__line { animation: none; }
 }
+
+/* ---------- 实时通话:静音开关 ---------- */
+/* 打电话模式,麦克风默认一直开;"静音"是异常状态,需要明显可辨。
+ * 沿用微信/Discord/Zoom 的设计语言。
+ *
+ * 关键技巧:把绿点 / 斜杠绑到 svg(圆形按钮本体),不要绑到外层 button,
+ * 否则会跑到圆圈外面去。用 svg 自身的 relative 定位锚点。 */
+.call__mic .icon-wrap,
+.call__mic { position: relative; }
+
+/* 让 svg 自己当锚点(SVG 元素默认 inline,需要 inline-block + 包一层位置参考) */
+.call__mic svg { position: relative; }
+
+/* 麦克风开着(默认) —— 圆圈内右下角一个低调的绿点 */
+.call__mic.is-live svg {
+  border-color: color-mix(in srgb, var(--border-strong) 70%, var(--char-accent) 30%);
+}
+.call__mic.is-live svg::after {
+  /* svg 是个图标,不能加伪元素,放在父按钮里但靠 svg 偏移 */
+  content: none;
+}
+/* 绿点用 ::before 挂在 button 上,坐标基于 svg 的可见区域(56×56 圆,居中) */
+.call__mic.is-live::before {
+  content: "";
+  position: absolute;
+  /* 圆形按钮 56x56,顶部留 7px gap,所以圆的 top 是 0~56;
+     绿点贴到圆的「右上 1 点钟方向」,距圆边 ~2px */
+  top: 6px;
+  left: calc(50% + 14px);
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 6px rgba(52, 211, 153, 0.7);
+  /* 加一圈跟按钮背景同色的描边,做出"嵌在按钮上"的层次感 */
+  outline: 2px solid var(--surface);
+}
+
+/* 静音 —— 图标变灰,圆内一条斜杠,一眼可辨 */
+.call__mic.is-muted svg {
+  opacity: 0.55;
+  border-color: rgba(255, 92, 158, 0.4);
+}
+.call__mic.is-muted::before {
+  content: "";
+  position: absolute;
+  /* 居中到 svg 圆心(svg 高 56,top 起点是 button 顶,所以圆心 y ≈ 28) */
+  top: 28px;
+  left: 50%;
+  width: 38px; height: 2px;
+  background: #ff5c9e;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+/* 错误提示 */
+.call__error {
+  background: rgba(255, 92, 158, 0.12);
+  border: 1px solid rgba(255, 92, 158, 0.4);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: #ffb1cf;
+  font: 500 13px/1.5 var(--font-sans);
+}
+
+/* 调试用耗时显示 */
+.call__timing {
+  font: 500 11px/1 var(--font-mono);
+  letter-spacing: 0.05em;
+  color: var(--text-tertiary);
+  opacity: 0.7;
+  margin-top: 8px;
+}

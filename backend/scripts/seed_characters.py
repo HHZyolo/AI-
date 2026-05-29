@@ -47,8 +47,9 @@ VOICE_DEFAULTS: dict[str, dict[str, object]] = {
         "speech_pitch": 1.0,
     },
     "sister": {
-        # 温柔小雅 —— 26 岁御姐档首选,语速略慢更稳重
-        "voice_id": "zh_female_wenrouxiaoya_moon_bigtts",
+        # 麦小兜 —— 声音复刻 2.0 自定义音色(default 项目下)
+        # 同时端到端 Realtime 也用这个 ID(realtime.py REALTIME_VOICE_MAP)
+        "voice_id": "S_dIWppjn32",
         "speech_rate": 0.95,
         "speech_pitch": 1.0,
     },

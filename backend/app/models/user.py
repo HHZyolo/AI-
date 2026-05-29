@@ -36,6 +36,8 @@ class User(Base):
     total_paid_seconds: Mapped[int] = mapped_column(Integer, default=0)
     # 试用额度是否已发放
     is_trial_granted: Mapped[bool] = mapped_column(Boolean, default=False)
+    # 已使用的兑换码（每个账号一辈子只能用一次，存码本身便于审计）
+    redeem_code_used: Mapped[str | None] = mapped_column(String(64), default=None)
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_now)
     last_login_at: Mapped[datetime] = mapped_column(

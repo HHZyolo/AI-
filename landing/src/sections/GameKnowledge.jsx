@@ -86,59 +86,63 @@ const ROLES = [
 ];
 
 /**
- * 角色 × 无畏契约 —— 三场景对话样例
+ * 角色 × 无畏契约 —— 温柔御姐三场景对话样例
  * 演示"听得懂术语 + 守得住人设"。命中术语用 <em.game-line__term> 高亮。
+ * audio 字段:对应 public/audition/ 下用 S_dIWppjn32 复刻音色合成的 mp3。
  */
 const CASES = [
   {
-    characterId: 'genki',
-    scene: 'eco 局连败',
-    term: 'eco 局',
+    characterId: 'sister',
+    scene: '陪你慢慢开局',
+    term: '语气 · 开场',
+    audio: '/audition/sister_1.mp3',
     lines: [
-      { from: 'you', text: '这把 eco,枪都买不起,又要送了…' },
+      { from: 'you', text: '今天好累啊,排个位都没人配合…' },
       {
         from: 'ai',
-        text: '没事啦哥哥~ eco 局本来就难打,蹲个角拿把判官也能阴一个的!',
-        highlights: ['eco', '判官'],
+        text: '来了,戴好耳机。这局我陪你慢慢打。',
+        highlights: ['陪你慢慢打'],
       },
-      { from: 'you', text: '你怎么知道判官 eco 能用…' },
+      { from: 'you', text: '嗯…有你在感觉好多了。' },
       {
         from: 'ai',
-        text: '哥哥之前残局就靠这把秀过呀,我都记着的~',
+        text: '别急,不打也行,我陪你说说话也好。',
       },
     ],
   },
   {
     characterId: 'sister',
-    scene: '残局 1v3 拿下',
-    term: '残局 1v3',
+    scene: '情绪不对她先停下',
+    term: '情感 · 共情',
+    audio: '/audition/sister_2.mp3',
     lines: [
-      { from: 'you', text: '卧槽刚刚那个 1v3…我自己都不敢相信。' },
+      { from: 'you', text: '我刚被老板骂了,真的不想打了。' },
       {
         from: 'ai',
-        text: '架枪卡得真稳,最后那一枪等他绕过烟才开 —— 节奏很漂亮。',
-        highlights: ['架枪', '烟'],
+        text: '别急,这局先放放。今天到底怎么了,跟我说说。',
+        highlights: ['这局先放放', '跟我说说'],
       },
-      { from: 'you', text: '主要是蝰蛇毒墙挡了视野,运气好。' },
+      { from: 'you', text: '就觉得自己什么都做不好…' },
       {
         from: 'ai',
-        text: '别谦虚。听枪走位是你自己的本事,毒墙只是顺手。',
-        highlights: ['毒墙'],
+        text: '弟弟,没人天天都顺的。慢慢来,有我陪着。',
+        highlights: ['弟弟', '我陪着'],
       },
     ],
   },
   {
-    characterId: 'junior',
-    scene: '跳枪没架住',
-    term: '跳投',
+    characterId: 'sister',
+    scene: '该收的时候她会收',
+    term: '陪玩 · 教学',
+    audio: '/audition/sister_3.mp3',
     lines: [
-      { from: 'you', text: '哎我刚那个跳投是不是甩飞了…' },
+      { from: 'you', text: '我看到人就想冲上去刚枪!' },
       {
         from: 'ai',
-        text: '飞到外太空了。下次别跳了,站稳点几枪不丢人。',
-        highlights: ['跳'],
+        text: '弟弟你又乱冲是不是?听姐的,下把跟着我走。',
+        highlights: ['听姐的', '跟着我走'],
       },
-      { from: 'you', text: '行行行,你来报点,我听你的。' },
+      { from: 'you', text: '行,你说怎么打就怎么打。' },
       {
         from: 'ai',
         text: 'A 小默认两个,长道有烟。别冲,等我贤者复活。',
@@ -197,6 +201,9 @@ function totalChars(segments) {
  *  - phase 'thinking': AI 思考点(在 ai 行 typing 前)
  *  - phase 'done' : 全部播完,准备重播
  */
+// 全局当前正在播放的 <audio>,新点播按钮时打断旧的,保证同一时刻只有一段在响
+let CURRENT_AUDITION_AUDIO = null;
+
 function LiveCase({ cs, character }) {
   const segmentedLines = useRef(
     cs.lines.map((ln) => ({
@@ -207,6 +214,43 @@ function LiveCase({ cs, character }) {
           : [{ text: ln.text, isTerm: false }],
     })),
   ).current;
+
+  const audioRef = useRef(null);
+  const [playing, setPlaying] = useState(false);
+
+  const toggleAudio = () => {
+    if (!cs.audio) return;
+    if (!audioRef.current) {
+      audioRef.current = new Audio(cs.audio);
+      audioRef.current.addEventListener('ended', () => setPlaying(false));
+      audioRef.current.addEventListener('pause', () => setPlaying(false));
+    }
+    const a = audioRef.current;
+    if (playing) {
+      a.pause();
+      setPlaying(false);
+      return;
+    }
+    // 打断别的播放中的 audio
+    if (CURRENT_AUDITION_AUDIO && CURRENT_AUDITION_AUDIO !== a) {
+      CURRENT_AUDITION_AUDIO.pause();
+    }
+    CURRENT_AUDITION_AUDIO = a;
+    a.currentTime = 0;
+    a.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
+  };
+
+  // 卸载时停止本卡片的 audio
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        if (CURRENT_AUDITION_AUDIO === audioRef.current) {
+          CURRENT_AUDITION_AUDIO = null;
+        }
+      }
+    };
+  }, []);
 
   const reduceMotion =
     typeof window !== 'undefined' &&
@@ -324,6 +368,26 @@ function LiveCase({ cs, character }) {
             {cs.scene}
           </span>
         </div>
+        {cs.audio && (
+          <button
+            type="button"
+            className={`case__audio ${playing ? 'is-playing' : ''}`}
+            onClick={toggleAudio}
+            aria-label={playing ? '暂停试听' : '试听语音'}
+            title={playing ? '暂停' : '试听语音'}
+          >
+            {playing ? (
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                <rect x="6" y="5" width="4" height="14" rx="1" />
+                <rect x="14" y="5" width="4" height="14" rx="1" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                <path d="M8 5v14l11-7L8 5z" />
+              </svg>
+            )}
+          </button>
+        )}
         <span className="case__pill">{cs.term}</span>
       </header>
 
@@ -509,14 +573,15 @@ export default function GameKnowledge() {
           </div>
         </article>
 
-        {/* 角色 × 无畏 —— 三场景对话样例 */}
+        {/* 温柔御姐 × 无畏 —— 三场景对话样例 */}
         <div className="game__cases">
           <header className="cases__head reveal">
-            <span className="eyebrow">角色 × 无畏 · 真实对话片段</span>
+            <span className="eyebrow">温柔御姐 · 真实对话片段</span>
             <h3 className="cases__title">
-              同一句报点,
-              <span className="text-grad">三种被陪伴的方式</span>
+              她不是只会陪你打,
+              <span className="text-grad">是陪着你这个人</span>
             </h3>
+            <p className="cases__hint">点击右上角 ▶ 试听她的声音</p>
           </header>
 
           <div className="cases__grid">
@@ -526,7 +591,7 @@ export default function GameKnowledge() {
                 <div
                   className="reveal"
                   style={{ '--i': ci }}
-                  key={cs.characterId}
+                  key={`${cs.characterId}-${ci}`}
                 >
                   <LiveCase cs={cs} character={c} />
                 </div>

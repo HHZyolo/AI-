@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import Icon from '../components/Icon';
 import { useAppState } from './appContext';
 
@@ -64,7 +65,7 @@ export default function LoginSheet({ onClose }) {
     if (e.key === 'Enter' && canSubmit) submit();
   };
 
-  return (
+  return createPortal(
     <div className="sheet-mask" onClick={onClose}>
       <div className="sheet" onClick={(e) => e.stopPropagation()}>
         <button
@@ -96,7 +97,7 @@ export default function LoginSheet({ onClose }) {
         <p className="sheet__desc">
           {tab === 'login'
             ? '使用邮箱与密码登录'
-            : '邮箱注册即可领取 10 分钟免费试用 · 仅限 18 岁以上成年用户'}
+            : '邮箱注册即可领取 3 分钟免费体验 · 仅限 18 岁以上成年用户'}
         </p>
 
         <div className="auth-tabs" role="tablist">
@@ -190,6 +191,7 @@ export default function LoginSheet({ onClose }) {
           本服务不向未成年人提供。
         </p>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

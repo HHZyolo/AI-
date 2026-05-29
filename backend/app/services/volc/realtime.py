@@ -54,14 +54,14 @@ class RealtimeCharacterCfg:
     greeting: str = ""     # 进入会话时让 AI 主动说的开场白(可空)
 
 
-# 端到端音色池(_jupiter_bigtts 系列)是一套独立的池,跟普通 TTS(_moon_bigtts)互不通用。
-# Character.voice_id 存的是普通 TTS 音色,这里按 slug 做端到端音色映射。
-# 后续真要上线再加 DB 列 realtime_voice_id;现在写死先把链路跑通。
+# 端到端音色支持两种:
+#   1. 预制 jupiter 系列(zh_female_xxx_jupiter_bigtts)
+#   2. 自定义复刻 voice_id(形如 S_xxxxxxxx),需在火山控制台「声音复刻」上传训练
+# 普通 TTS 的 _moon_bigtts 系列在端到端服务里报 InvalidSpeaker,不通用。
 REALTIME_VOICE_MAP: dict[str, str] = {
-    "sister": "zh_female_xiaohe_jupiter_bigtts",   # 甜美少女,凑合温柔御姐
-    "genki": "zh_female_vv_jupiter_bigtts",         # 活泼默认,适合元气妹妹
-    "junior": "zh_female_xiaohe_jupiter_bigtts",    # 高冷学妹也先用 xiaohe,后续看克隆
+    "sister": "S_dIWppjn32",   # 麦小兜复刻音色(声音复刻 2.0,APP default 项目下)
 }
+# 兜底:其他未配置 slug 用 vv(端到端默认女声)
 DEFAULT_REALTIME_VOICE = "zh_female_vv_jupiter_bigtts"
 
 

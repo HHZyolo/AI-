@@ -3,17 +3,20 @@ import { NavLink, Link } from 'react-router-dom';
 import Icon from '../components/Icon';
 import { getCharacter } from '../data/characters';
 import { useAppState } from './appContext';
+import LoginSheet from './LoginSheet';
+import RedeemSheet from './RedeemSheet';
 
 /** 产品页顶部导航栏 —— 桌面全宽 */
 const LINKS = [
   { to: '/app', label: '陪玩', end: true },
-  { to: '/app/characters', label: '选择角色', end: false },
 ];
 
 export default function AppNav() {
   const { characterId, loggedIn, email, logout } = useAppState();
   const character = getCharacter(characterId);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showRedeem, setShowRedeem] = useState(false);
   const menuRef = useRef(null);
 
   // 点外部 / 按 Esc 关闭菜单
@@ -89,49 +92,66 @@ export default function AppNav() {
           </span>
 
           {loggedIn ? (
-            <div className="usermenu" ref={menuRef}>
+            <>
+              <div className="usermenu" ref={menuRef}>
+                <button
+                  type="button"
+                  className={`usermenu__trigger ${menuOpen ? 'is-open' : ''}`}
+                  onClick={() => setMenuOpen((v) => !v)}
+                  aria-haspopup="menu"
+                  aria-expanded={menuOpen}
+                >
+                  <span className="usermenu__avatar" aria-hidden="true">
+                    {(email[0] || 'U').toUpperCase()}
+                  </span>
+                  <span className="usermenu__email">{shortEmail}</span>
+                  <Icon name="arrow" size={12} />
+                </button>
+
+                {menuOpen && (
+                  <div className="usermenu__panel" role="menu">
+                    <div className="usermenu__info">
+                      <div className="usermenu__info-label">当前账号</div>
+                      <div className="usermenu__info-email">{email}</div>
+                    </div>
+                    <button
+                      type="button"
+                      className="usermenu__item is-danger"
+                      onClick={() => {
+                        setMenuOpen(false);
+                        logout();
+                      }}
+                      role="menuitem"
+                    >
+                      退出登录
+                    </button>
+                  </div>
+                )}
+              </div>
               <button
                 type="button"
-                className={`usermenu__trigger ${menuOpen ? 'is-open' : ''}`}
-                onClick={() => setMenuOpen((v) => !v)}
-                aria-haspopup="menu"
-                aria-expanded={menuOpen}
+                className="appnav__user tag appnav__login"
+                onClick={() => setShowRedeem(true)}
+                title="使用兑换码增加体验时长"
               >
-                <span className="usermenu__avatar" aria-hidden="true">
-                  {(email[0] || 'U').toUpperCase()}
-                </span>
-                <span className="usermenu__email">{shortEmail}</span>
-                <Icon name="arrow" size={12} />
+                <Icon name="gift" size={13} />
+                兑换码
               </button>
-
-              {menuOpen && (
-                <div className="usermenu__panel" role="menu">
-                  <div className="usermenu__info">
-                    <div className="usermenu__info-label">当前账号</div>
-                    <div className="usermenu__info-email">{email}</div>
-                  </div>
-                  <button
-                    type="button"
-                    className="usermenu__item is-danger"
-                    onClick={() => {
-                      setMenuOpen(false);
-                      logout();
-                    }}
-                    role="menuitem"
-                  >
-                    退出登录
-                  </button>
-                </div>
-              )}
-            </div>
+            </>
           ) : (
-            <span className="appnav__user tag">
+            <button
+              type="button"
+              className="appnav__user tag appnav__login"
+              onClick={() => setShowLogin(true)}
+            >
               <Icon name="mic" size={13} />
-              未登录
-            </span>
+              登录 / 注册
+            </button>
           )}
         </div>
       </div>
+      {showLogin && <LoginSheet onClose={() => setShowLogin(false)} />}
+      {showRedeem && <RedeemSheet onClose={() => setShowRedeem(false)} />}
     </nav>
   );
 }

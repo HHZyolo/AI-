@@ -1,9 +1,12 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Icon from '../components/Icon';
 import { CHARACTERS } from '../data/characters';
 import './Characters.css';
 
-function CharacterCard({ c }) {
+// 全局单例 audio，整页同时只能播一段
+let CURRENT_CHAR_AUDIO = null;
+
+function CharacterCard({ c, audio }) {
   // 3D 倾斜 hover —— pointermove rAF 节流
   const onMove = useCallback((e) => {
     if (!window.matchMedia('(hover: hover)').matches) return;
@@ -26,6 +29,39 @@ function CharacterCard({ c }) {
     card.style.setProperty('--ry', '0deg');
   }, []);
 
+  const audioRef = useRef(null);
+  const [playing, setPlaying] = useState(false);
+
+  const toggleAudio = (e) => {
+    e.stopPropagation();
+    if (!audio) return;
+    if (!audioRef.current) {
+      audioRef.current = new Audio(audio);
+      audioRef.current.addEventListener('ended', () => setPlaying(false));
+      audioRef.current.addEventListener('pause', () => setPlaying(false));
+    }
+    const a = audioRef.current;
+    if (playing) {
+      a.pause();
+      return;
+    }
+    if (CURRENT_CHAR_AUDIO && CURRENT_CHAR_AUDIO !== a) {
+      CURRENT_CHAR_AUDIO.pause();
+    }
+    CURRENT_CHAR_AUDIO = a;
+    a.currentTime = 0;
+    a.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
+  };
+
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        if (CURRENT_CHAR_AUDIO === audioRef.current) CURRENT_CHAR_AUDIO = null;
+      }
+    };
+  }, []);
+
   return (
     <article
       className="char-card card"
@@ -43,13 +79,33 @@ function CharacterCard({ c }) {
         <div className="char-card__id">
           <h3 className="char-card__name">{c.name}</h3>
           <span className="char-card__age tag">{c.age}</span>
+          {audio && (
+            <button
+              type="button"
+              className={`char-card__audiobtn ${playing ? 'is-playing' : ''}`}
+              onClick={toggleAudio}
+              aria-label={playing ? '暂停试听' : '试听她的声音'}
+            >
+              {playing ? (
+                <>
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                    <rect x="6" y="5" width="4" height="14" rx="1" />
+                    <rect x="14" y="5" width="4" height="14" rx="1" />
+                  </svg>
+                  <span>试听中</span>
+                </>
+              ) : (
+                <>
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                    <path d="M8 5v14l11-7L8 5z" />
+                  </svg>
+                  <span>试听声音</span>
+                </>
+              )}
+            </button>
+          )}
         </div>
         <p className="char-card__persona">{c.persona}</p>
-
-        <blockquote className="char-card__quote">
-          <Icon name="chat" size={16} className="char-card__quote-ic" />
-          {c.quote}
-        </blockquote>
 
         <ul className="char-card__traits">
           {c.traits.map((t) => (
@@ -69,31 +125,27 @@ function CharacterCard({ c }) {
 }
 
 export default function Characters() {
+  // MVP 单角色:只展示温柔御姐
+  const sister = CHARACTERS.find((c) => c.id === 'sister') || CHARACTERS[0];
   return (
     <section className="section characters" id="characters">
       <div className="container">
         <header className="characters__head reveal">
-          <span className="eyebrow">总有一个 TA · 对你的胃口</span>
+          <span className="eyebrow">陪你的人 · 是温柔御姐</span>
           <h2 className="section-h2">
-            三种性格,
-            <span className="text-grad">三种被陪伴的方式</span>
+            一个懂你的人,
+            <span className="text-grad">比一群陪玩更稳</span>
           </h2>
           <p className="section-lead">
-            元气、温柔、还是带点小傲娇 —— 挑一个最想听到的声音。
-            每个角色都懂游戏,只是哄你的方式不一样。
+            26 岁,声音磁性、说话慢。
+            打游戏她陪着,情绪不对她先停下来,听你说。
           </p>
         </header>
 
-        <div className="characters__grid">
-          {CHARACTERS.map((c, i) => (
-            <div
-              className="reveal"
-              style={{ '--i': i }}
-              key={c.id}
-            >
-              <CharacterCard c={c} />
-            </div>
-          ))}
+        <div className="characters__grid characters__grid--single">
+          <div className="reveal" style={{ '--i': 0 }}>
+            <CharacterCard c={sister} audio="/audition/sister_2.mp3" />
+          </div>
         </div>
       </div>
     </section>

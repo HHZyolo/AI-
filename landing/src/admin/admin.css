@@ -1,0 +1,196 @@
+/* 运营后台 —— 极简风，跟用户界面分开 */
+
+.admin-login {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: #0E0918;
+  padding: 24px;
+}
+.admin-login__box {
+  width: 100%;
+  max-width: 380px;
+  background: #1A1326;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 32px;
+}
+.admin-login__box h1 {
+  margin: 0 0 8px;
+  font-size: 22px;
+  color: #fff;
+}
+.admin-login__hint {
+  margin: 0 0 20px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.6;
+}
+.admin-login form {
+  display: grid;
+  gap: 12px;
+}
+
+.admin {
+  min-height: 100vh;
+  background: #0E0918;
+  color: rgba(255, 255, 255, 0.92);
+  padding: 32px 40px;
+  font: 14px/1.6 -apple-system, "PingFang SC", sans-serif;
+}
+.admin__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+.admin__head h1 {
+  margin: 0;
+  font-size: 22px;
+  color: #fff;
+}
+.admin__panel {
+  background: #1A1326;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+.admin__panel h2 {
+  margin: 0 0 16px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+}
+.admin__panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.admin__panel-head h2 { margin: 0; }
+
+/* 表单 */
+.admin-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+.admin-form > label {
+  display: grid;
+  gap: 6px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+.admin-form > button {
+  grid-column: 1 / -1;
+  justify-self: start;
+}
+
+.admin-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font: inherit;
+  padding: 10px 12px;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color .15s ease;
+}
+.admin-input:focus { border-color: #FF5C9E; }
+
+/* 按钮 */
+.admin-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: inherit;
+  font-weight: 500;
+  padding: 9px 16px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.admin-btn--primary {
+  background: linear-gradient(135deg, #FF5C9E, #9D6BFF);
+  color: #fff;
+}
+.admin-btn--primary:hover { filter: brightness(1.1); }
+.admin-btn--primary:disabled { opacity: 0.5; cursor: not-allowed; }
+.admin-btn--ghost {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.16);
+  color: rgba(255, 255, 255, 0.8);
+}
+.admin-btn--ghost:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.04);
+}
+.admin-btn--danger {
+  background: transparent;
+  border-color: rgba(255, 80, 80, 0.4);
+  color: #ff7a7a;
+  font-size: 12px;
+  padding: 6px 12px;
+}
+.admin-btn--danger:hover {
+  background: rgba(255, 80, 80, 0.08);
+  border-color: rgba(255, 80, 80, 0.6);
+}
+
+/* 表格 */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.admin-table th,
+.admin-table td {
+  text-align: left;
+  padding: 12px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.admin-table th {
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.admin-table tr:last-child td { border-bottom: none; }
+.admin-table tbody tr:hover { background: rgba(255, 255, 255, 0.02); }
+
+.admin-code {
+  font-family: ui-monospace, "SF Mono", monospace;
+  background: rgba(255, 92, 158, 0.12);
+  color: #FF8FB8;
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-size: 12px;
+}
+.admin-note {
+  color: rgba(255, 255, 255, 0.6);
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.admin-empty {
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
+  text-align: center;
+  padding: 24px;
+}
+
+.admin-err {
+  color: #ff7a7a;
+  font-size: 13px;
+  margin: 8px 0;
+}
+
+@media (max-width: 720px) {
+  .admin-form { grid-template-columns: 1fr; }
+  .admin { padding: 20px; }
+}

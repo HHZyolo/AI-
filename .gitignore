@@ -29,3 +29,20 @@ backend/data/
 backend/.venv/
 backend/__pycache__/
 backend/**/__pycache__/
+
+# 本地不上传：朋友原始录音、调研/答辩/访谈等私人文档与 docx
+# 仅根目录的 mp3/MP3（试听用 mp3 在 landing/public/audition/ 不受影响）
+/*.MP3
+/*.mp3
+/*.docx
+/AI陪玩搭子*
+/小滴个性化打车*
+/商业化.md
+/市场调研报告.md
+/用户调研*.md
+/立项报告.md
+/精品分析.md
+/访谈*.md
+/面试-*.md
+/PRD选型修订与成本测算.md
+/DESIGN.md

@@ -36,7 +36,11 @@ class Settings(BaseSettings):
     jwt_expire_days: int = 30
 
     # 新用户试用额度（秒）
-    trial_seconds: int = 600  # 10 分钟
+    trial_seconds: int = 180  # 3 分钟
+    # 兑换码奖励秒数（注册时填写有效兑换码额外发放）
+    redeem_code_bonus_seconds: int = 1800  # 30 分钟
+    # 管理接口的简单鉴权 token（创建兑换码用）
+    admin_token: str = "dev-admin-token-change-me"
 
     # —— 火山引擎 · 语音技术(TTS + 流式 ASR 共用一组凭证) ——
     # 来源:控制台「语音技术 → 应用管理」中你创建的应用(default)

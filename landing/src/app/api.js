@@ -104,5 +104,9 @@ export const api = {
   login: (email, password) =>
     request('/auth/login', { method: 'POST', body: { email, password } }),
   me: (token) => request('/users/me', { token }),
+  consume: (token, seconds) =>
+    request('/users/consume', { method: 'POST', token, body: { seconds } }),
+  redeem: (token, code) =>
+    request('/users/redeem', { method: 'POST', token, body: { code } }),
   talk,
 };

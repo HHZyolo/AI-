@@ -41,10 +41,10 @@ export default function Hero() {
         <div className="hero__actions">
           <Link className="btn-primary" to="/app">
             <Icon name="mic" size={20} />
-            免费试用 10 分钟
+            免费试用 3 分钟
           </Link>
           <a className="btn-secondary" href="#characters">
-            看看三个 TA
+            听听她的声音
             <Icon name="arrow" size={18} />
           </a>
         </div>

@@ -55,7 +55,7 @@ export default function Pricing() {
           </h2>
           <p className="section-lead">
             真人陪玩一晚 100–300 元。这里按时长包买,聊多少算多少,
-            不玩抽卡、不搞自动续费。先用免费的 10 分钟试试。
+            不玩抽卡、不搞自动续费。先用免费的 3 分钟试试。
           </p>
         </header>
 
@@ -98,7 +98,7 @@ export default function Pricing() {
 
         <p className="pricing__foot reveal">
           <Icon name="clock" size={15} />
-          新用户首次免费试用 <b>10 分钟</b> 语音 —— 不满意,不用付一分钱。
+          新用户首次免费试用 <b>3 分钟</b> 语音 —— 不满意,不用付一分钱。
         </p>
       </div>
     </section>

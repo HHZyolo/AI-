@@ -19,9 +19,10 @@ export default function Home() {
   const character = getCharacter(characterId);
   const [showLogin, setShowLogin] = useState(false);
 
-  const pct = (trialLeft / trialTotal) * 100;
-  const empty = trialLeft <= 0;
-  const low = !empty && trialLeft <= 120;
+  // 未登录时进度条按"满"显示（视觉占位），已登录后才反映真实余额。
+  const pct = loggedIn ? (trialLeft / trialTotal) * 100 : 100;
+  const empty = loggedIn && trialLeft <= 0;
+  const low = loggedIn && !empty && trialLeft <= 120;
 
   const startCall = () => {
     if (!loggedIn) {
@@ -45,10 +46,6 @@ export default function Home() {
           <blockquote className="home__char-quote">
             {character.quote}
           </blockquote>
-          <Link to="/app/characters" className="home__switch">
-            <Icon name="heart" size={15} />
-            换个角色
-          </Link>
         </section>
 
         {/* 右:开始陪玩 */}
@@ -66,7 +63,7 @@ export default function Home() {
           <p className="home__panel-lead">
             {loggedIn
               ? `${character.name}已经准备好陪你了 —— 点下面开始这次陪玩。`
-              : '邮箱注册即可领取 10 分钟免费试用,无需下载,浏览器直接开聊。'}
+              : '邮箱注册即可领取 3 分钟免费试用,无需下载,浏览器直接开聊。'}
           </p>
 
           {/* 试用额度 */}
@@ -77,7 +74,7 @@ export default function Home() {
                 {empty ? '试用额度已用完' : '免费试用额度'}
               </span>
               <span className="trial__value">
-                <b>{fmt(trialLeft)}</b> / {fmt(trialTotal)}
+                <b>{fmt(loggedIn ? trialLeft : trialTotal)}</b> / {fmt(trialTotal)}
               </span>
             </div>
             <div className="trial__bar">
@@ -97,12 +94,16 @@ export default function Home() {
             disabled={empty}
           >
             <Icon name="mic" size={22} />
-            {empty ? '额度用完 · 去购买时长包' : '开始陪玩'}
+            {empty
+              ? '额度用完 · 去购买时长包'
+              : loggedIn
+                ? '开始陪玩'
+                : '登录 / 注册开始陪玩'}
           </button>
 
           {empty && (
             <p className="home__hint">
-              首次试用的 10 分钟已用完 ——{' '}
+              首次试用的 3 分钟已用完 ——{' '}
               <Link to="/#pricing" className="link">
                 查看时长包
               </Link>

@@ -46,12 +46,12 @@ export default function CtaFooter() {
             <span className="text-grad">别再一个人开黑</span>
           </h2>
           <p className="cta__lead">
-            手机号登录,免费试用 10 分钟。聊得来,再决定要不要留下她。
+            手机号登录,免费试用 3 分钟。聊得来,再决定要不要留下她。
           </p>
           <div className="cta__actions">
             <Link className="btn-primary cta__btn" to="/app">
               <Icon name="mic" size={20} />
-              免费试用 10 分钟
+              免费试用 3 分钟
             </Link>
             <span className="cta__hint">
               <Icon name="bolt" size={14} />

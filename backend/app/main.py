@@ -9,7 +9,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import auth, characters, health, users
+from app.api import admin, auth, characters, health, users
 from app.config import get_settings
 from app.database import close_db, init_db
 from app.logging_conf import setup_logging
@@ -52,6 +52,7 @@ app.include_router(health.router)
 app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(characters.router)
+app.include_router(admin.router)
 
 
 @app.get("/", tags=["root"])

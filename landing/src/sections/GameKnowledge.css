@@ -219,7 +219,6 @@
 }
 .case__scene svg { color: var(--hud); }
 .case__pill {
-  margin-left: auto;
   font: 600 11px/1 var(--font-mono);
   letter-spacing: 0.04em;
   color: var(--char-accent);
@@ -228,6 +227,44 @@
   border-radius: 999px;
   padding: 6px 10px;
   flex-shrink: 0;
+}
+
+/* 试听按钮 —— 显示在场景标签前 */
+.case__audio {
+  margin-left: auto;
+  width: 32px; height: 32px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--char-accent) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--char-accent) 32%, transparent);
+  color: var(--char-accent);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform .15s ease, background .15s ease, box-shadow .25s ease;
+}
+.case__audio:hover {
+  background: color-mix(in srgb, var(--char-accent) 24%, transparent);
+  transform: scale(1.05);
+}
+.case__audio.is-playing {
+  background: var(--char-accent);
+  color: #fff;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--char-accent) 22%, transparent),
+              0 0 22px color-mix(in srgb, var(--char-accent) 55%, transparent);
+  animation: case-audio-pulse 1.4s ease-in-out infinite;
+}
+@keyframes case-audio-pulse {
+  0%, 100% { box-shadow: 0 0 0 4px color-mix(in srgb, var(--char-accent) 22%, transparent),
+                          0 0 22px color-mix(in srgb, var(--char-accent) 55%, transparent); }
+  50%      { box-shadow: 0 0 0 8px color-mix(in srgb, var(--char-accent) 8%, transparent),
+                          0 0 34px color-mix(in srgb, var(--char-accent) 70%, transparent); }
+}
+
+.cases__hint {
+  font: 400 13px/1.5 var(--font-sans);
+  color: var(--text-tertiary);
+  margin: 10px 0 0;
+  text-align: center;
 }
 
 .case__chat {

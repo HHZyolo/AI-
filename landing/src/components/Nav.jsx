@@ -51,7 +51,7 @@ export default function Nav() {
           </a>
         ))}
         <Link className="btn-primary nav__cta" to="/app">
-          免费试用 10 分钟
+          免费试用 3 分钟
         </Link>
       </div>
 

@@ -11,6 +11,11 @@
   gap: var(--space-3);
   perspective: 1200px;
 }
+/* 单角色版式 —— 居中一张卡 */
+.characters__grid--single {
+  grid-template-columns: minmax(0, 460px);
+  justify-content: center;
+}
 
 .char-card {
   height: 100%;
@@ -70,8 +75,40 @@
   color: var(--text-on-accent);
 }
 
+/* 角色名字一行的「试听声音」胶囊按钮 */
+.char-card__audiobtn {
+  margin-left: auto;
+  display: inline-flex; align-items: center; gap: 6px;
+  font: 600 12px/1 var(--font-sans);
+  letter-spacing: 0.02em;
+  color: var(--char-accent);
+  background: color-mix(in srgb, var(--char-accent) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--char-accent) 35%, transparent);
+  border-radius: 999px;
+  padding: 7px 12px 7px 10px;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, transform .15s ease;
+}
+.char-card__audiobtn:hover {
+  background: color-mix(in srgb, var(--char-accent) 22%, transparent);
+  border-color: color-mix(in srgb, var(--char-accent) 55%, transparent);
+  transform: translateY(-1px);
+}
+.char-card__audiobtn.is-playing {
+  background: var(--char-accent);
+  color: #fff;
+  border-color: var(--char-accent);
+  animation: char-audiobtn-pulse 1.4s ease-in-out infinite;
+}
+@keyframes char-audiobtn-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--char-accent) 55%, transparent); }
+  50%      { box-shadow: 0 0 0 8px color-mix(in srgb, var(--char-accent) 0%, transparent); }
+}
+
+/* 名字行换成 flex，让试听按钮自然靠右 */
 .char-card__id {
-  display: flex; align-items: baseline; gap: 12px;
+  display: flex; align-items: center; gap: 12px;
+  flex-wrap: wrap;
 }
 .char-card__name {
   font: 800 24px/1.2 var(--font-display);

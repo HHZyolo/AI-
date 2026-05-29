@@ -5,6 +5,7 @@ database.init_db() 依赖此处的 import 触发模型注册到 Base.metadata。
 """
 
 from app.models.character import Character
+from app.models.redeem_code import RedeemCode
 from app.models.user import User
 
-__all__ = ["Character", "User"]
+__all__ = ["Character", "RedeemCode", "User"]

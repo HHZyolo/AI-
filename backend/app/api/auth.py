@@ -16,6 +16,7 @@ from app.database import get_db
 from app.models.user import User
 from app.schemas.auth import AuthResponse, LoginRequest, RegisterRequest
 from app.services.password import hash_password, verify_password
+from app.services.redeem import consume_redeem_code
 from app.services.security import create_access_token
 
 logger = logging.getLogger(__name__)
@@ -33,7 +34,7 @@ def _normalize_email(email: str) -> str:
 async def register(
     body: RegisterRequest, db: AsyncSession = Depends(get_db)
 ) -> AuthResponse:
-    """邮箱+密码注册。新用户发放试用额度，直接签发 JWT。"""
+    """邮箱+密码注册。新用户发放试用额度，可选用兑换码额外加时长。"""
     email = _normalize_email(body.email)
 
     exists = await db.scalar(select(User.id).where(User.email == email))
@@ -42,19 +43,34 @@ async def register(
             status_code=status.HTTP_409_CONFLICT, detail="该邮箱已注册"
         )
 
+    bonus_seconds = 0
+    code_used: str | None = None
+    if body.redeem_code and body.redeem_code.strip():
+        code, bonus_seconds = await consume_redeem_code(db, body.redeem_code)
+        code_used = code.code
+
     user = User(
         email=email,
         password_hash=hash_password(body.password),
-        balance_seconds=settings.trial_seconds,
+        balance_seconds=settings.trial_seconds + bonus_seconds,
         is_trial_granted=True,
+        redeem_code_used=code_used,
     )
     db.add(user)
     await db.commit()
     await db.refresh(user)
-    logger.info("新用户注册：%s，发放试用额度 %d 秒", email, settings.trial_seconds)
+    logger.info(
+        "新用户注册：%s，试用 %d 秒，兑换码 %s 额外 %d 秒",
+        email,
+        settings.trial_seconds,
+        code_used or "（未使用）",
+        bonus_seconds,
+    )
 
     token = create_access_token(user.id)
-    return AuthResponse(access_token=token, is_new_user=True)
+    return AuthResponse(
+        access_token=token, is_new_user=True, redeem_bonus_seconds=bonus_seconds
+    )
 
 
 @router.post("/login", response_model=AuthResponse)

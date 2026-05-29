@@ -80,10 +80,13 @@ export default function Call() {
     return () => clearInterval(iv);
   }, [phase, trialLeft]);
 
-  // 结算
+  // 结算：通话结束时把本次消耗秒数上报后端，落库扣减。
+  // 这是"退出重进刷新时长"Bug 的修复点 —— 后端是权威账本。
   useEffect(() => {
     if ((phase === 'ended' || phase === 'error') && elapsed > 0) {
-      consume(Math.min(elapsed, trialLeft));
+      consume(Math.min(elapsed, trialLeft)).catch((e) => {
+        console.warn('扣费上报失败，已自动刷新余额', e);
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase]);
@@ -372,9 +375,6 @@ export default function Call() {
           </>
         ) : (
           <div className="call__after">
-            <button className="btn-secondary" onClick={() => navigate('/app/characters')}>
-              换个角色
-            </button>
             <button className="btn-primary" onClick={() => navigate('/app')}>
               回到主页
             </button>

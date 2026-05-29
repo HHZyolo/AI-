@@ -19,6 +19,7 @@ const PATHS = {
   chat: <><path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-6.4A8 8 0 1 1 21 12Z" /></>,
   mail: <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></>,
   lock: <><rect x="4" y="11" width="16" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></>,
+  gift: <><rect x="3" y="8" width="18" height="13" rx="2" /><path d="M3 12h18M12 8v13M8 8a2 2 0 1 1 0-4c2 0 4 4 4 4s2-4 4-4a2 2 0 1 1 0 4Z" /></>,
 };
 
 export default function Icon({ name, size = 22, className = '', style }) {

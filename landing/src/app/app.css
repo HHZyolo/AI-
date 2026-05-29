@@ -71,6 +71,14 @@
   padding: 6px 11px;
 }
 .appnav__user svg { color: var(--accent); }
+.appnav__login {
+  cursor: pointer; font: inherit;
+  transition: border-color .15s ease, background-color .15s ease;
+}
+.appnav__login:hover {
+  border-color: var(--accent);
+  background: rgba(255, 92, 158, 0.08);
+}
 
 /* ---------- 顶部用户菜单 ---------- */
 .usermenu { position: relative; }

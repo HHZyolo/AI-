@@ -13,8 +13,11 @@ import { api } from './api';
  */
 const TOKEN_KEY = 'aipw_token';
 
+// MVP 单角色策略：固定 sister。后续多角色恢复时改回 useState
+const FIXED_CHARACTER_ID = 'sister';
+
 export function AppStateProvider({ children }) {
-  const [characterId, setCharacterId] = useState('genki');
+  const [characterId, setCharacterId] = useState(FIXED_CHARACTER_ID);
   const [user, setUser] = useState(null); // { id, email, balance_seconds, ... }
   const [token, setToken] = useState(() => localStorage.getItem(TOKEN_KEY));
   const [bootstrapped, setBootstrapped] = useState(false);
@@ -61,6 +64,21 @@ export function AppStateProvider({ children }) {
     [persistToken],
   );
 
+  // 登录后核销兑换码：成功后用后端返回的余额更新本地 user
+  const redeem = useCallback(
+    async (code) => {
+      if (!token) throw new Error('请先登录');
+      const res = await api.redeem(token, code);
+      setUser((u) =>
+        u
+          ? { ...u, balance_seconds: res.balance_seconds, redeem_code_used: res.code }
+          : u,
+      );
+      return res; // { balance_seconds, bonus_seconds, code }
+    },
+    [token],
+  );
+
   const login = useCallback(
     async (email, password) => {
       const { access_token } = await api.login(email, password);
@@ -78,19 +96,40 @@ export function AppStateProvider({ children }) {
     setUser(null);
   }, []);
 
-  // 通话本地乐观扣减额度（真扣费等后端语音接口接通后再校正）
-  const consume = useCallback((sec) => {
-    setUser((u) =>
-      u ? { ...u, balance_seconds: Math.max(0, u.balance_seconds - sec) } : u,
-    );
-  }, []);
+  // 通话结束时上报本次消耗秒数，后端是权威账本。
+  // 本地先乐观更新 UI，再后端落库；最终以后端返回为准。
+  const consume = useCallback(
+    async (sec) => {
+      if (!sec || sec <= 0 || !token) return;
+      setUser((u) =>
+        u ? { ...u, balance_seconds: Math.max(0, u.balance_seconds - sec) } : u,
+      );
+      try {
+        const { balance_seconds } = await api.consume(token, sec);
+        setUser((u) => (u ? { ...u, balance_seconds } : u));
+      } catch (e) {
+        // 上报失败时刷新一次后端数据，避免 UI 跟数据库长期不一致
+        try {
+          const me = await api.me(token);
+          setUser(me);
+        } catch {
+          /* ignore */
+        }
+        // 把异常抛给调用方，方便上层 toast
+        throw e;
+      }
+    },
+    [token],
+  );
 
-  const TRIAL_TOTAL = 10 * 60;
+  // 注册赠送的免费秒数（与后端 TRIAL_SECONDS 保持一致，仅做未登录时的 UI 占位）
+  const TRIAL_TOTAL = 3 * 60;
 
   const value = {
     characterId,
     setCharacterId,
-    trialLeft: user?.balance_seconds ?? TRIAL_TOTAL,
+    // 未登录时不显示「剩余 X 分钟」，由 UI 自己根据 loggedIn 决定文案
+    trialLeft: user?.balance_seconds ?? 0,
     trialTotal: TRIAL_TOTAL,
     consume,
     loggedIn: !!user,
@@ -99,6 +138,8 @@ export function AppStateProvider({ children }) {
     register,
     login,
     logout,
+    redeem,
+    redeemCodeUsed: user?.redeem_code_used ?? null,
   };
 
   return <AppCtx.Provider value={value}>{children}</AppCtx.Provider>;

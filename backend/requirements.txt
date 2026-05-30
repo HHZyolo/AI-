@@ -8,9 +8,10 @@ pydantic==2.10.4
 pydantic-settings==2.7.1
 email-validator==2.2.0
 
-# 数据库（SQLite 起步，SQLAlchemy 保持可移植；后切 MySQL 时加 aiomysql）
+# 数据库（SQLAlchemy 异步，本地起步用 aiosqlite，线上切 Supabase/PostgreSQL 用 asyncpg）
 sqlalchemy[asyncio]==2.0.36
 aiosqlite==0.20.0
+asyncpg==0.31.0
 alembic==1.14.0
 
 # 认证
